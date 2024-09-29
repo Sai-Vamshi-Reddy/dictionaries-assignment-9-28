@@ -7,13 +7,11 @@ import data
 def get_item_information(item_code):
   """ this  function that will return the item name and price for a given item code.
     For example, find_menu_item('D2') should return Lemonade, and integer 3 as the result """
-  print(item_code)
   for item in data.menu_items:
     if item['code'] == item_code:
       return item['name'], item['price'], item['stock']
   print('Item not found')
   return None, None, None
-
 def display_items():
   print('Drinks:', [(item['name'], item['code']) for item in data.menu_items if item['code'] in data.drink_items])
   print('Appetizers:', [(item['name'], item['code']) for item in data.menu_items if item['code'] in data.appetizer_items])
@@ -62,7 +60,7 @@ def display_current_order(order):
         return
     print("\nCurrent Order:")
     for idx, (item_name, item_price, quantity) in enumerate(order, start=1):
-        print(f"{idx}. {item_name} (x{quantity}) - ${item_price * quantity:.2f}") 
+        print(f"{idx}. {item_name} (x{quantity}) - ${item_price * quantity:.2f}")
 
 def update_menu():
     """Manager function to update the menu (add, remove, update items)."""
