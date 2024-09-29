@@ -94,4 +94,3 @@ if __name__ == '__main__':
     #print(functions.get_item_information('D1'))
     show_main_menu()
 
-
