@@ -3,35 +3,39 @@
 #Use this  function that will return the item name and price for a given item code
 # for example, find_menu_item('D2') should return Lemonade, and integer 3 as the result
 import data
+
 def get_item_information(item_code):
   """ this  function that will return the item name and price for a given item code.
     For example, find_menu_item('D2') should return Lemonade, and integer 3 as the result """
   print(item_code)
   for item in data.menu_items:
-    item_number, item_name, item_price = item.split(' ')
-    if item_number == item_code:
-      return item_name.encode("ascii", "ignore").decode(), int(item_price)
+    if item['code'] == item_code:
+      return item['name'], item['price'], item['stock']
+  print('Item not found')
+  return None, None, None
 
 def display_items():
-  print('Drinks', [d.replace('\u200b','') for d in data.menu_items if d[0] == 'D'])
-  print('Appetizers', [a.replace('\u200b','') for a in data.menu_items if a[0] == 'A'])
-  print("Salads:", [s.replace('\u200b','') for s in data.menu_items if s[0] == 'S'])
-  print("Entrees:", [e.replace('\u200b','') for e in data.menu_items if e[0] == 'E'])
-  print("Desserts:", [t.replace('\u200b','') for t in data.menu_items if t[0] == 'T'])
+  print('Drinks:', [(item['name'], item['code']) for item in data.menu_items if item['code'] in data.drink_items])
+  print('Appetizers:', [(item['name'], item['code']) for item in data.menu_items if item['code'] in data.appetizer_items])
+  print('Salads:', [(item['name'], item['code']) for item in data.menu_items if item['code'] in data.salad_items])
+  print('Entrees:', [(item['name'], item['code']) for item in data.menu_items if item['code'] in data.entree_items])
+  print('Desserts:', [(item['name'], item['code']) for item in data.menu_items if item['code'] in data.dessert_items])
 
 def get_item_number():
   while True:
    display_items()
-   order_item = input('Enter dish number and quantity: ')
-   parts = order_item.split()
-   if len(parts) == 2:  # Check if there are exactly two parts
-      item_code, quantity = parts
-      if item_code in data.all_items and quantity.isdigit():  # Check if item code is valid and quantity is a digit
-         return item_code, int(quantity)  # Return the item code and quantity as integer
-      else:
-         print("Invalid dish number or quantity. Please try again.")
+   order_item = input('Enter dish number and quantity: ').split()
+   if len(order_item) == 2:
+    item_code, quantity = order_item
+    item_name, item_price, stock = get_item_information(item_code)
+    if item_name and int(quantity) <= stock:
+      return item_code, int(quantity)
+    elif item_name:
+      print(f"Only {stock} {item_name}(s) left. Please adjust your quantity.")
+    else:
+      print("Invalid item code. Try again.")
    else:
-     print("Please enter both dish number and quantity, separated by a space.")
+    print("Invalid input. Enter both dish number and quantity.")
 
 def print_check(order):
     print("\nYour Order Summary:")
